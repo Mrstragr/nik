@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday, Love! ❤️</title>
+    <title>Happy Birthday! ❤️</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap');
         
@@ -14,7 +14,7 @@
             font-family: 'Montserrat', sans-serif;
             color: #333;
             overflow-x: hidden;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -46,26 +46,49 @@
             margin: 20px 0;
         }
 
-        .photo-slider {
+        .slider-container {
             margin: 30px auto;
             width: 100%;
             max-width: 500px;
+            position: relative;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .photo-slider img {
-            width: 100%;
-            display: block;
+        .slider {
+            display: flex;
             transition: transform 0.5s ease;
         }
 
-        .photo-slider img:hover {
-            transform: scale(1.03);
+        .slider img {
+            min-width: 100%;
+            height: 300px;
+            object-fit: cover;
         }
 
-        button {
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .slider-nav button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-nav button:hover {
+            background: #ff4757;
+        }
+
+        button#surpriseBtn {
             background: #ff6b6b;
             color: white;
             border: none;
@@ -78,7 +101,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        button:hover {
+        button#surpriseBtn:hover {
             background: #ff4757;
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -114,55 +137,75 @@
 <body>
     <div class="container">
         <h1>Happy Birthday, My Love! ❤️</h1>
-        <p>Today is all about you—the most amazing person in my life.</p>
+        <p>You light up my world every day. Here's to you!</p>
         
-        <div class="photo-slider">
-            <!-- Replace these with your own images -->
-            <img src="file:///Users/nikhilanand/Downloads/WhatsApp%20Image%202025-07-27%20at%2017.06.17.jpeg" alt="Our Memories">
+        <div class="slider-container">
+            <div class="slider" id="slider">
+                <!-- Replace these with your local images -->
+                <img src="1.jpeg" alt="Our Memory 1">
+                <img src="2.jpeg" alt="Our Memory 2">
+                <img src="3.jpeg" alt="Our Memory 3">
+            </div>
+            <div class="slider-nav">
+                <button id="prevBtn">←</button>
+                <button id="nextBtn">→</button>
+            </div>
         </div>
         
-        <p>Every moment with you is special. Here's to many more adventures together!</p>
+        <p>Every moment with you is a treasure. I love you endlessly.</p>
         
         <button id="surpriseBtn">Click for a Surprise!</button>
-        <p id="hiddenMessage" class="hidden-message">I love you more than words can express. Happy Birthday! 🎉</p>
+        <p id="hiddenMessage" class="hidden-message">You're the best thing that ever happened to me. Happy Birthday! 🎉</p>
     </div>
 
-    <!-- Confetti will be added here via JS -->
-    
     <script>
+        // Slider functionality
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slider.children.length;
+            updateSlider();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slider.children.length) % slider.children.length;
+            updateSlider();
+        });
+
+        // Surprise button
         document.getElementById('surpriseBtn').addEventListener('click', function() {
-            // Show hidden message
             document.getElementById('hiddenMessage').style.display = 'block';
             
-            // Create confetti
+            // Confetti
             for (let i = 0; i < 100; i++) {
                 createConfetti();
             }
             
-            // Play a sound (optional)
-            const audio = new Audio('https://www.soundjay.com/human/sounds/applause-01.mp3');
-            audio.play().catch(e => console.log("Audio play failed: " + e));
+            // Optional: Play a sound (remove if no audio file)
+            try {
+                const audio = new Audio('happy-birthday.mp3');
+                audio.play();
+            } catch (e) {
+                console.log("Audio error: " + e);
+            }
         });
 
         function createConfetti() {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
-            
-            // Random color
             const colors = ['#ff6b6b', '#ffa502', '#2ed573', '#1e90ff', '#ff4757'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.backgroundColor = randomColor;
-            
-            // Random position
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             confetti.style.left = Math.random() * 100 + 'vw';
             confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            
             document.body.appendChild(confetti);
-            
-            // Remove confetti after animation
-            setTimeout(() => {
-                confetti.remove();
-            }, 5000);
+            setTimeout(() => confetti.remove(), 5000);
         }
     </script>
 </body>
